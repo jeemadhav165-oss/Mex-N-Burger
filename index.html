@@ -3,1018 +3,1436 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mex N Burger</title>
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Bebas+Neue&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Revive Your Ride — Expert Auto Detailing</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #C0392B;
-    --green: #27AE60;
-    --yellow: #F39C12;
-    --cream: #FDF6E3;
-    --dark: #1A0A00;
-    --orange: #E67E22;
+    --black: #080808;
+    --deep: #0e0e0e;
+    --surface: #141414;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --red: #e8192c;
+    --red-dim: #b01020;
+    --gold: #c9993a;
+    --white: #f0ece4;
+    --muted: #888;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
 
   body {
-    background-color: var(--dark);
-    color: var(--cream);
-    font-family: 'Nunito', sans-serif;
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
     overflow-x: hidden;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E🌮%3C/text%3E%3C/svg%3E"), auto;
+    cursor: none;
   }
 
-  /* NOISE TEXTURE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  /* ─── CUSTOM CURSOR ─── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--red);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.4;
+    transition: transform 0.1s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(232,25,44,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+  }
+  body:hover .cursor-ring { opacity: 1; }
+
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.3;
   }
 
-  /* ===== HERO ===== */
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 500;
+    padding: 22px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    backdrop-filter: blur(4px);
+    transition: padding 0.4s ease, background 0.4s ease;
+  }
+  nav.scrolled {
+    padding: 14px 60px;
+    background: rgba(8,8,8,0.97);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-cond);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 1px; background: var(--red);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+  .nav-cta {
+    font-family: var(--font-cond);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--black); background: var(--red);
+    padding: 10px 28px; border: none; cursor: none;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .nav-cta:hover { background: var(--white); transform: scale(1.04); }
+
+  /* ─── HERO ─── */
   .hero {
     min-height: 100vh;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center;
     overflow: hidden;
-    background: radial-gradient(ellipse at 30% 50%, #3d1200 0%, var(--dark) 60%);
+    background: var(--black);
   }
 
-  /* Papel picado banner */
-  .papel-picado {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    display: flex;
-    gap: 0;
-    z-index: 10;
+  /* Animated road/track lines */
+  .hero-bg {
+    position: absolute; inset: 0;
     overflow: hidden;
   }
-  .papel-picado::before {
-    content: '';
+  .road-line {
     position: absolute;
-    top: 0;
-    left: 0; right: 0;
-    height: 6px;
-    background: repeating-linear-gradient(90deg, var(--red) 0 40px, var(--yellow) 40px 80px, var(--green) 80px 120px);
+    width: 2px;
+    background: linear-gradient(to bottom, transparent, rgba(232,25,44,0.15), transparent);
+    animation: roadLine 3s linear infinite;
+  }
+  .road-line:nth-child(1) { left: 15%; height: 300px; animation-delay: 0s; animation-duration: 2.8s; }
+  .road-line:nth-child(2) { left: 30%; height: 400px; animation-delay: 0.8s; animation-duration: 3.2s; }
+  .road-line:nth-child(3) { left: 50%; height: 250px; animation-delay: 1.4s; animation-duration: 2.5s; }
+  .road-line:nth-child(4) { left: 70%; height: 350px; animation-delay: 0.3s; animation-duration: 3s; }
+  .road-line:nth-child(5) { left: 85%; height: 450px; animation-delay: 1.8s; animation-duration: 2.7s; }
+  @keyframes roadLine {
+    0% { top: -300px; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { top: 110vh; opacity: 0; }
   }
 
-  .flag {
-    width: 40px;
-    height: 60px;
-    clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
-    flex-shrink: 0;
-    animation: sway 2s ease-in-out infinite alternate;
-  }
-  .flag:nth-child(3n+1) { background: var(--red); animation-delay: 0s; }
-  .flag:nth-child(3n+2) { background: var(--yellow); animation-delay: 0.3s; }
-  .flag:nth-child(3n+3) { background: var(--green); animation-delay: 0.6s; }
-
-  @keyframes sway {
-    0% { transform: rotate(-3deg) translateY(0); }
-    100% { transform: rotate(3deg) translateY(4px); }
-  }
-
-  /* Decorative sombrero */
-  .sombrero-bg {
+  /* Big SVG car silhouette */
+  .hero-car-silhouette {
     position: absolute;
-    right: -80px;
-    bottom: -40px;
-    font-size: 420px;
+    right: -5%;
+    bottom: 5%;
+    width: 70%;
     opacity: 0.04;
-    transform: rotate(-15deg);
-    line-height: 1;
-    pointer-events: none;
-    filter: blur(2px);
+    animation: carFloat 6s ease-in-out infinite;
   }
-
-  .pepper-bg {
-    position: absolute;
-    left: -60px;
-    top: 50px;
-    font-size: 300px;
-    opacity: 0.05;
-    transform: rotate(20deg);
-    pointer-events: none;
+  @keyframes carFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-18px); }
   }
 
   .hero-content {
-    text-align: center;
-    z-index: 2;
-    animation: fadeUp 1s ease both;
+    position: relative;
+    z-index: 10;
+    padding: 0 60px;
+    max-width: 900px;
+    animation: heroReveal 1s cubic-bezier(0.22,1,0.36,1) 0.2s both;
   }
-
-  @keyframes fadeUp {
+  @keyframes heroReveal {
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .hero-tag {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1rem;
-    color: var(--yellow);
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-    text-shadow: 0 0 20px rgba(243,156,18,0.5);
-    animation: fadeUp 1s ease 0.2s both;
+  .hero-eyebrow {
+    font-family: var(--font-cond);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 40px; height: 1px;
+    background: var(--red);
   }
 
   .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(5rem, 15vw, 12rem);
+    font-family: var(--font-display);
+    font-size: clamp(80px, 12vw, 160px);
     line-height: 0.9;
     letter-spacing: 2px;
-    background: linear-gradient(135deg, #fff 0%, var(--yellow) 40%, var(--orange) 70%, var(--red) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
-    filter: drop-shadow(0 4px 20px rgba(230,126,34,0.4));
-    animation: fadeUp 1s ease 0.1s both;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  .hero-title .line-1 { display: block; color: var(--white); }
+  .hero-title .line-2 {
+    display: block;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--red);
+    animation: strokePulse 4s ease-in-out infinite;
+  }
+  @keyframes strokePulse {
+    0%, 100% { -webkit-text-stroke-color: var(--red); }
+    50% { -webkit-text-stroke-color: var(--gold); }
   }
 
   .hero-sub {
-    font-family: 'Permanent Marker', cursive;
-    font-size: clamp(1rem, 3vw, 1.6rem);
-    color: var(--green);
-    margin-top: 10px;
-    letter-spacing: 2px;
-    animation: fadeUp 1s ease 0.3s both;
-  }
-
-  .hero-desc {
-    margin-top: 24px;
-    font-size: 1.1rem;
-    color: rgba(253,246,227,0.7);
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    animation: fadeUp 1s ease 0.4s both;
+    font-size: 17px; font-weight: 300;
     line-height: 1.7;
+    color: rgba(240,236,228,0.65);
+    max-width: 480px;
+    margin-bottom: 48px;
+    letter-spacing: 0.3px;
   }
 
-  .hero-btns {
-    margin-top: 40px;
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeUp 1s ease 0.5s both;
-  }
-
-  .btn {
-    padding: 14px 36px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn:hover { transform: translateY(-3px) scale(1.03); }
-
+  .hero-buttons { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
   .btn-primary {
-    background: linear-gradient(135deg, var(--red), var(--orange));
-    color: #fff;
-    box-shadow: 0 6px 24px rgba(192,57,43,0.5);
-  }
-  .btn-primary:hover { box-shadow: 0 10px 32px rgba(192,57,43,0.7); }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--yellow);
-    border: 2px solid var(--yellow);
-    box-shadow: 0 0 16px rgba(243,156,18,0.2);
-  }
-  .btn-outline:hover { background: var(--yellow); color: var(--dark); }
-
-  /* Scroll indicator */
-  .scroll-hint {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2rem;
-    animation: bounce 1.6s ease-in-out infinite;
-    z-index: 5;
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(10px); }
-  }
-
-  /* ===== DIVIDER ===== */
-  .divider {
-    height: 6px;
-    background: repeating-linear-gradient(90deg, var(--red) 0 33.3%, var(--white) 33.3% 66.6%, var(--green) 66.6% 100%);
-  }
-  .divider-white { height: 6px; background: var(--cream); }
-
-  /* ===== SPECIALS BANNER ===== */
-  .ticker {
-    background: var(--red);
-    padding: 14px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker-inner {
+    font-family: var(--font-cond);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--black); background: var(--red);
+    padding: 16px 42px; border: none; cursor: none;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
     display: inline-block;
-    animation: ticker 20s linear infinite;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    letter-spacing: 3px;
-    color: #fff;
   }
-  @keyframes ticker {
-    0% { transform: translateX(100vw); }
-    100% { transform: translateX(-100%); }
+  .btn-primary:hover { background: var(--white); transform: translateX(4px); }
+  .btn-ghost {
+    font-family: var(--font-cond);
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 12px;
+    transition: gap 0.25s, color 0.25s;
   }
-  .ticker-sep { margin: 0 30px; color: var(--yellow); }
-
-  /* ===== MENU SECTION ===== */
-  .section {
-    padding: 90px 24px;
-    max-width: 1200px;
-    margin: 0 auto;
+  .btn-ghost:hover { gap: 20px; color: var(--red); }
+  .btn-ghost::after {
+    content: '→';
+    font-size: 18px;
   }
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 60px;
+  .hero-stats {
+    position: absolute; right: 60px; bottom: 60px;
+    display: flex; gap: 48px;
+    z-index: 10;
+    animation: heroReveal 1s cubic-bezier(0.22,1,0.36,1) 0.5s both;
   }
-
-  .section-eyebrow {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1rem;
-    color: var(--yellow);
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-    display: block;
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 7vw, 5.5rem);
-    line-height: 1;
-    background: linear-gradient(135deg, var(--cream), var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .section-line {
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--red), var(--yellow), var(--green));
-    margin: 20px auto 0;
-    border-radius: 2px;
-  }
-
-  /* Menu Cards */
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 28px;
-  }
-
-  .menu-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative;
-    backdrop-filter: blur(4px);
-  }
-  .menu-card:hover {
-    transform: translateY(-8px) rotate(0.5deg);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    border-color: rgba(243,156,18,0.3);
-  }
-
-  .card-emoji {
-    font-size: 4rem;
-    padding: 30px 24px 10px;
-    display: block;
-    text-align: center;
-    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
-  }
-
-  .card-body {
-    padding: 0 24px 28px;
-    text-align: center;
-  }
-
-  .card-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    color: var(--cream);
-    margin-bottom: 6px;
-  }
-
-  .card-desc {
-    font-size: 0.88rem;
-    color: rgba(253,246,227,0.6);
-    line-height: 1.6;
-    margin-bottom: 16px;
-  }
-
-  .card-price {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1.5rem;
-    color: var(--yellow);
-  }
-
-  .card-badge {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    background: var(--red);
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
-
-  /* ===== ABOUT SECTION ===== */
-  .about-wrap {
-    background: linear-gradient(135deg, rgba(192,57,43,0.12), rgba(39,174,96,0.08));
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 24px;
-    padding: 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-  }
-
-  @media (max-width: 768px) {
-    .about-wrap { grid-template-columns: 1fr; padding: 36px 24px; gap: 36px; }
-    .hero-title { font-size: 5rem; }
-  }
-
-  .about-big {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1.05;
-    background: linear-gradient(135deg, #fff, var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .about-text {
-    font-size: 1.05rem;
-    line-height: 1.9;
-    color: rgba(253,246,227,0.75);
-    margin-top: 20px;
-  }
-
-  .stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 32px;
-  }
-
-  .stat {
-    text-align: center;
-    padding: 20px;
-    background: rgba(255,255,255,0.04);
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.07);
-  }
-
+  .stat-item { text-align: right; }
   .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    color: var(--yellow);
-    line-height: 1;
-    display: block;
+    font-family: var(--font-display);
+    font-size: 52px; line-height: 1;
+    color: var(--white);
+    letter-spacing: 1px;
   }
-
+  .stat-num span { color: var(--red); font-size: 32px; }
   .stat-label {
-    font-size: 0.8rem;
-    color: rgba(253,246,227,0.5);
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-family: var(--font-cond);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted);
     margin-top: 4px;
   }
 
-  /* ===== SPECIALS SECTION ===== */
-  .specials-bg {
-    background: linear-gradient(180deg, var(--dark) 0%, #0d0500 50%, var(--dark) 100%);
-    padding: 90px 24px;
+  /* scroll indicator */
+  .scroll-indicator {
+    position: absolute; left: 60px; bottom: 60px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    z-index: 10;
+    animation: heroReveal 1s 0.8s both;
+  }
+  .scroll-indicator span {
+    font-family: var(--font-cond);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+  }
+  .scroll-line {
+    width: 1px; height: 60px;
+    background: var(--border);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 30px;
+    background: var(--red);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(300%); }
   }
 
-  .specials-grid {
-    max-width: 1200px;
-    margin: 0 auto;
+  /* ─── MARQUEE STRIP ─── */
+  .marquee-strip {
+    background: var(--red);
+    padding: 14px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 60px;
+    animation: marqueeScroll 18s linear infinite;
+    white-space: nowrap;
+    width: max-content;
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-size: 15px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--black);
+    display: flex; align-items: center; gap: 20px;
+  }
+  .marquee-dot {
+    width: 6px; height: 6px;
+    background: var(--black);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  @keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTION COMMONS ─── */
+  section { padding: 120px 60px; }
+  .section-label {
+    font-family: var(--font-cond);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 5px; text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-label::before {
+    content: '';
+    display: block; width: 28px; height: 1px;
+    background: var(--red);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+  }
+
+  /* ─── SERVICES ─── */
+  .services { background: var(--deep); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 60px;
+  }
+  .service-card {
+    background: var(--card);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), background 0.3s;
+    cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--red);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover { transform: translateY(-6px); background: #1e1e1e; }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 52px; height: 52px;
+    margin-bottom: 28px;
+    color: var(--red);
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  }
+  .service-card:hover .service-icon { transform: scale(1.15) rotate(-5deg); }
+
+  .service-name {
+    font-family: var(--font-cond);
+    font-size: 24px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 14px;
+    color: var(--white);
+  }
+  .service-desc {
+    font-size: 14px; font-weight: 300;
+    line-height: 1.75;
+    color: rgba(240,236,228,0.55);
+  }
+  .service-num {
+    position: absolute; top: 28px; right: 32px;
+    font-family: var(--font-display);
+    font-size: 64px;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+    transition: color 0.3s;
+  }
+  .service-card:hover .service-num { color: rgba(232,25,44,0.08); }
+
+  /* ─── PROCESS ─── */
+  .process { background: var(--black); position: relative; overflow: hidden; }
+  .process-bg-text {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 280px;
+    color: rgba(255,255,255,0.018);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: -5px;
+  }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    position: relative; z-index: 1;
+  }
+  .process-step {
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .process-step.visible { opacity: 1; transform: translateY(0); }
+  .process-step:nth-child(1) { transition-delay: 0.1s; }
+  .process-step:nth-child(2) { transition-delay: 0.2s; }
+  .process-step:nth-child(3) { transition-delay: 0.3s; }
+  .process-step:nth-child(4) { transition-delay: 0.4s; }
+
+  .step-connector {
+    position: absolute; top: 28px; left: calc(100% + 0px); right: -40px;
+    height: 1px; background: var(--border);
+    display: none;
+  }
+  .process-step:not(:last-child) .step-connector { display: block; }
+
+  .step-number {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--red);
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .step-number::before {
+    content: '';
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--card);
+    flex-shrink: 0;
+  }
+  .step-dot {
+    width: 52px; height: 52px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--red);
+    margin-bottom: 20px;
+    transition: all 0.3s;
+  }
+  .process-step:hover .step-dot {
+    background: var(--red);
+    color: var(--black);
+    border-color: var(--red);
+    transform: scale(1.1);
+  }
+  .step-title {
+    font-family: var(--font-cond);
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .step-desc {
+    font-size: 14px; font-weight: 300;
+    line-height: 1.7;
+    color: rgba(240,236,228,0.5);
+  }
+
+  /* ─── WHY US ─── */
+  .why { background: var(--surface); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .why-left .section-title { margin-bottom: 28px; }
+  .why-intro {
+    font-size: 16px; font-weight: 300;
+    line-height: 1.8;
+    color: rgba(240,236,228,0.55);
+    margin-bottom: 48px;
+  }
+  .why-features { display: flex; flex-direction: column; gap: 24px; }
+  .feature-row {
+    display: flex; gap: 20px; align-items: flex-start;
+    padding: 24px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: none;
+  }
+  .feature-row:hover { border-color: var(--red); transform: translateX(8px); }
+  .feature-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    color: var(--red);
+  }
+  .feature-text h4 {
+    font-family: var(--font-cond);
+    font-size: 16px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .feature-text p {
+    font-size: 13px; font-weight: 300;
+    line-height: 1.6;
+    color: rgba(240,236,228,0.5);
+  }
+  .why-right {
+    position: relative;
+  }
+  .why-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .why-visual::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--red), var(--gold));
+  }
+  .review-stars {
+    color: var(--gold);
+    font-size: 22px;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+  .review-quote {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 1.2;
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+  .review-quote .accent { color: var(--red); }
+  .reviewer {
+    display: flex; align-items: center; gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .reviewer-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--red);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 20px;
+  }
+  .reviewer-name { font-family: var(--font-cond); font-size: 16px; font-weight: 700; }
+  .reviewer-title { font-size: 12px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+  .why-bg-number {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 200px;
+    color: rgba(255,255,255,0.02);
+    bottom: -20px; right: -10px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  /* ─── PACKAGES ─── */
+  .packages { background: var(--black); }
+  .packages-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-
-  @media (max-width: 900px) {
-    .specials-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 600px) {
-    .specials-grid { grid-template-columns: 1fr; }
-    .hero-title { font-size: 4rem; }
-  }
-
-  .special-card {
-    border-radius: 16px;
-    padding: 36px 28px;
+  .package-card {
+    border: 1px solid var(--border);
+    padding: 48px 36px;
     position: relative;
+    transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+    cursor: none;
     overflow: hidden;
-    transition: transform 0.3s;
   }
-  .special-card:hover { transform: scale(1.03); }
-
-  .sc-red { background: linear-gradient(135deg, #7d1010, #c0392b); }
-  .sc-green { background: linear-gradient(135deg, #145a32, #27ae60); }
-  .sc-yellow { background: linear-gradient(135deg, #784212, #f39c12); }
-
-  .special-card::after {
+  .package-card::after {
     content: '';
-    position: absolute;
-    bottom: -20px;
-    right: -20px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.07);
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(232,25,44,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
   }
-
-  .special-day {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    opacity: 0.8;
+  .package-card:hover { border-color: var(--red); transform: translateY(-8px); }
+  .package-card:hover::after { opacity: 1; }
+  .package-card.featured {
+    border-color: var(--red);
+    background: var(--card);
+  }
+  .package-card.featured::after { opacity: 1; }
+  .featured-badge {
+    position: absolute; top: 0; right: 32px;
+    background: var(--red);
+    font-family: var(--font-cond);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--black);
+    padding: 6px 16px 8px;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+  }
+  .package-tier {
+    font-family: var(--font-cond);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .package-name {
+    font-family: var(--font-display);
+    font-size: 42px;
+    letter-spacing: 1px;
     margin-bottom: 8px;
   }
-
-  .special-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: #fff;
+  .package-price {
+    display: flex; align-items: baseline; gap: 4px;
+    margin-bottom: 28px;
+  }
+  .price-from { font-size: 12px; color: var(--muted); }
+  .price-num {
+    font-family: var(--font-display);
+    font-size: 54px; line-height: 1;
+    color: var(--red);
+  }
+  .price-unit { font-size: 13px; color: var(--muted); }
+  .package-divider {
+    height: 1px; background: var(--border);
+    margin-bottom: 28px;
+  }
+  .package-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .package-features li {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 300;
+    color: rgba(240,236,228,0.7);
+  }
+  .package-features li::before {
+    content: '✓';
+    color: var(--red);
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+  .pkg-btn {
+    display: block; text-align: center;
+    font-family: var(--font-cond);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    padding: 14px;
+    border: 1px solid var(--red);
+    color: var(--white);
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: none;
+  }
+  .pkg-btn:hover, .package-card.featured .pkg-btn {
+    background: var(--red);
+    color: var(--black);
   }
 
-  .special-detail {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-top: 8px;
-    line-height: 1.6;
-  }
-
-  .special-price {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 2.4rem;
-    color: #fff;
-    margin-top: 20px;
-    display: block;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-
-  /* ===== TESTIMONIALS ===== */
-  .reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .review-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 16px;
-    padding: 28px;
-  }
-
-  .review-stars {
-    font-size: 1.2rem;
-    margin-bottom: 12px;
-    letter-spacing: 2px;
-  }
-
-  .review-text {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: rgba(253,246,227,0.8);
-    font-style: italic;
-  }
-
-  .review-author {
-    margin-top: 20px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    color: var(--yellow);
-  }
-
-  /* ===== LOCATION / CTA ===== */
-  .cta-section {
-    background: linear-gradient(135deg, var(--red) 0%, #7d0a0a 50%, #1a0a00 100%);
-    padding: 100px 24px;
-    text-align: center;
+  /* ─── CTA BANNER ─── */
+  .cta-banner {
+    background: var(--red);
+    padding: 80px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
     position: relative;
     overflow: hidden;
   }
-
-  .cta-section::before {
-    content: '🌮';
+  .cta-banner::before {
+    content: 'BOOK';
     position: absolute;
-    font-size: 600px;
-    opacity: 0.04;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: 220px;
+    color: rgba(0,0,0,0.1);
+    right: -20px; top: 50%;
+    transform: translateY(-50%);
     pointer-events: none;
+    letter-spacing: -5px;
   }
-
-  .cta-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 8vw, 7rem);
-    line-height: 1;
-    color: #fff;
-    text-shadow: 0 4px 24px rgba(0,0,0,0.4);
-    position: relative;
-    z-index: 2;
-  }
-
-  .cta-sub {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 1.3rem;
-    color: var(--yellow);
-    margin-top: 12px;
-    margin-bottom: 40px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .cta-info {
-    display: flex;
-    gap: 48px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 48px;
-    position: relative;
-    z-index: 2;
-  }
-
-  .info-item {
-    text-align: center;
-  }
-
-  .info-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
-  .info-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 3px;
-    opacity: 0.7;
-  }
-  .info-val {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--cream);
-    margin-top: 4px;
-  }
-
-  /* ===== FOOTER ===== */
-  footer {
-    background: #0a0400;
-    padding: 40px 24px;
-    text-align: center;
-    border-top: 3px solid var(--red);
-  }
-
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    background: linear-gradient(135deg, var(--yellow), var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 2px;
-  }
-
-  .footer-tagline {
-    font-family: 'Permanent Marker', cursive;
-    color: rgba(253,246,227,0.4);
-    font-size: 0.9rem;
-    margin-top: 6px;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    margin-top: 24px;
-    flex-wrap: wrap;
-  }
-
-  .footer-links a {
-    color: rgba(253,246,227,0.5);
-    text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 2px;
+  .cta-banner h2 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 70px);
+    letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: 'Bebas Neue', sans-serif;
-    transition: color 0.2s;
+    color: var(--black);
+    line-height: 0.95;
   }
-  .footer-links a:hover { color: var(--yellow); }
+  .cta-banner h2 span {
+    -webkit-text-stroke: 2px var(--black);
+    color: transparent;
+  }
+  .cta-banner-btn {
+    font-family: var(--font-cond);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--red); background: var(--black);
+    padding: 18px 52px; border: none; cursor: none;
+    text-decoration: none;
+    transition: background 0.25s, color 0.25s;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    display: inline-block;
+    flex-shrink: 0;
+    position: relative; z-index: 1;
+  }
+  .cta-banner-btn:hover { background: var(--white); }
 
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--deep);
+    padding: 80px 60px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .nav-logo { display: block; margin-bottom: 18px; }
+  .footer-brand p {
+    font-size: 13px; font-weight: 300;
+    line-height: 1.7;
+    color: rgba(240,236,228,0.45);
+    max-width: 280px;
+  }
+  .footer-col h5 {
+    font-family: var(--font-cond);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-col a {
+    font-size: 14px; font-weight: 300;
+    color: rgba(240,236,228,0.55);
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+  }
+  .footer-col a:hover { color: var(--red); padding-left: 8px; }
+  .footer-bottom {
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
   .footer-copy {
-    margin-top: 28px;
-    font-size: 0.75rem;
-    color: rgba(253,246,227,0.25);
+    font-size: 12px; color: rgba(240,236,228,0.3);
+    letter-spacing: 1px;
   }
-
-  /* Color stripe footer */
-  .stripe {
-    height: 6px;
-    background: linear-gradient(90deg, var(--red) 0 33%, #fff 33% 66%, var(--green) 66% 100%);
+  .footer-social { display: flex; gap: 20px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; color: var(--muted);
+    font-size: 13px;
+    transition: all 0.25s;
   }
+  .social-link:hover { border-color: var(--red); color: var(--red); transform: translateY(-3px); }
 
-  /* nav */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 40px;
-    background: rgba(10,4,0,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+  /* ─── CONTACT FORM ─── */
+  .contact { background: var(--surface); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .contact-info h3 {
+    font-family: var(--font-cond);
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 16px;
+    margin-top: 32px;
   }
-
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, var(--yellow), var(--orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-decoration: none;
+  .contact-info h3:first-child { margin-top: 0; }
+  .contact-info p {
+    font-size: 14px; font-weight: 300;
+    line-height: 1.7;
+    color: rgba(240,236,228,0.55);
   }
-
-  .nav-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
+  .contact-hours { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .contact-hours span {
+    font-size: 13px; color: rgba(240,236,228,0.55);
+    display: flex; justify-content: space-between;
+    max-width: 260px;
   }
+  .contact-hours strong { color: var(--white); font-weight: 500; }
 
-  .nav-links a {
-    color: rgba(253,246,227,0.7);
-    text-decoration: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    transition: color 0.2s;
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-family: var(--font-cond);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
   }
-  .nav-links a:hover { color: var(--yellow); }
-
-  .nav-order {
-    background: var(--red);
-    color: #fff;
-    padding: 8px 22px;
-    border-radius: 4px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.2s;
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: none;
+    appearance: none;
   }
-  .nav-order:hover { background: var(--orange); transform: scale(1.05); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--red);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group select option { background: var(--card); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .submit-btn {
+    font-family: var(--font-cond);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--black); background: var(--red);
+    padding: 16px 48px; border: none; cursor: none;
+    transition: all 0.25s ease;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    display: inline-block;
+  }
+  .submit-btn:hover { background: var(--white); transform: scale(1.03); }
 
-  @media (max-width: 700px) {
-    nav { padding: 14px 20px; }
+  /* ─── INTERSECTION OBSERVER ANIMATIONS ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 30px; }
+    section { padding: 80px 30px; }
+    .hero-content { padding: 0 30px; }
+    .hero-stats { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .packages-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .footer-bottom { flex-direction: column; gap: 20px; }
     .nav-links { display: none; }
+    .cta-banner { padding: 60px 30px; }
   }
 </style>
 </head>
 <body>
 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
 <!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Mex N Burger 🌮</a>
+<nav id="navbar">
+  <a href="#" class="nav-logo">REVIVE<span>.</span>RYD</a>
   <ul class="nav-links">
-    <li><a href="#menu">Menu</a></li>
-    <li><a href="#specials">Specials</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#location">Find Us</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="#location" class="nav-order">Order Now</a>
+  <a href="#contact" class="nav-cta">Book Now</a>
 </nav>
 
 <!-- HERO -->
-<section class="hero">
-  <!-- Papel picado flags -->
-  <div class="papel-picado" id="flags"></div>
-  <div class="sombrero-bg">🪅</div>
-  <div class="pepper-bg">🌶️</div>
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+    <div class="road-line"></div>
+  </div>
+
+  <!-- SVG Car Silhouette -->
+  <svg class="hero-car-silhouette" viewBox="0 0 800 300" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M780 200 L700 200 C700 200 695 180 680 175 C665 170 640 175 635 200 L230 200 C230 200 225 180 210 175 C195 170 170 175 165 200 L80 200 L20 200 L10 190 L10 175 L60 165 L100 120 L160 100 L200 90 L280 80 L380 75 L480 80 L560 85 L620 105 L680 135 L740 155 L780 165 Z"/>
+    <ellipse cx="200" cy="200" rx="35" ry="35"/>
+    <ellipse cx="650" cy="200" rx="35" ry="35"/>
+    <circle cx="200" cy="200" r="20" fill="#080808"/>
+    <circle cx="650" cy="200" r="20" fill="#080808"/>
+  </svg>
 
   <div class="hero-content">
-    <p class="hero-tag">¡Bienvenidos Amigos!</p>
-    <h1 class="hero-title">MEX<br>N<br>BURGER</h1>
-    <p class="hero-sub">Where Mexico Meets the Grill 🔥</p>
-    <p class="hero-desc">Bold flavors. Sizzling patties. Real Mexican soul. Every bite is a fiesta.</p>
-    <div class="hero-btns">
-      <a href="#menu" class="btn btn-primary">See Our Menu</a>
-      <a href="#specials" class="btn btn-outline">Today's Specials</a>
+    <div class="hero-eyebrow">Expert Auto Detailing</div>
+    <h1 class="hero-title">
+      <span class="line-1">Revive</span>
+      <span class="line-2">Your Ride</span>
+    </h1>
+    <p class="hero-sub">Professional detailing services that restore your vehicle to showroom condition. Every surface. Every detail. Every time.</p>
+    <div class="hero-buttons">
+      <a href="#packages" class="btn-primary">View Packages</a>
+      <a href="#services" class="btn-ghost">Our Services</a>
     </div>
   </div>
 
-  <div class="scroll-hint">⬇️</div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker">
-  <span class="ticker-inner">
-    🌮 TACO TUESDAYS &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🍔 JALAPEÑO SMASH BURGER &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🥑 GUAC IS EXTRA &amp; WORTH IT &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🌶️ HABANERO CHALLENGE &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🎉 FIESTA FRIDAYS — LIVE MUSIC &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🍺 COLD HORCHATA &amp; MEXICAN SODAS &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🌮 TACO TUESDAYS &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-    🍔 JALAPEÑO SMASH BURGER &nbsp;<span class="ticker-sep">✦</span>&nbsp;
-  </span>
-</div>
-
-<!-- MENU -->
-<section id="menu">
-  <div class="section">
-    <div class="section-header">
-      <span class="section-eyebrow">🍽️ Our Menu</span>
-      <h2 class="section-title">Fuego On A Plate</h2>
-      <div class="section-line"></div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">2K<span>+</span></div>
+      <div class="stat-label">Cars Detailed</div>
     </div>
-    <div class="menu-grid">
-      <div class="menu-card">
-        <div class="card-badge">🔥 BESTSELLER</div>
-        <span class="card-emoji">🍔</span>
-        <div class="card-body">
-          <div class="card-name">El Jalapeño Smash</div>
-          <div class="card-desc">Double smash patty, pepper jack, pickled jalapeños, chipotle mayo & crispy tortilla strips</div>
-          <div class="card-price">$13.99</div>
-        </div>
-      </div>
-      <div class="menu-card">
-        <span class="card-emoji">🌮</span>
-        <div class="card-body">
-          <div class="card-name">Street Taco Trio</div>
-          <div class="card-desc">Corn tortillas, slow-braised birria beef, onion, cilantro & salsa roja. Dip included.</div>
-          <div class="card-price">$11.49</div>
-        </div>
-      </div>
-      <div class="menu-card">
-        <div class="card-badge">🌶️ SPICY</div>
-        <span class="card-emoji">🌯</span>
-        <div class="card-body">
-          <div class="card-name">Burrito Loco</div>
-          <div class="card-desc">XL flour tortilla, grilled chicken, rice, black beans, habanero crema & queso fresco</div>
-          <div class="card-price">$12.99</div>
-        </div>
-      </div>
-      <div class="menu-card">
-        <span class="card-emoji">🥑</span>
-        <div class="card-body">
-          <div class="card-name">Guacamole & Chips</div>
-          <div class="card-desc">Hand-smashed avocado, lime, red onion, tomato, fresh jalapeño. Made to order.</div>
-          <div class="card-price">$7.99</div>
-        </div>
-      </div>
-      <div class="menu-card">
-        <div class="card-badge">NEW</div>
-        <span class="card-emoji">🍟</span>
-        <div class="card-body">
-          <div class="card-name">Elote Fries</div>
-          <div class="card-desc">Crispy fries loaded with street corn, cotija cheese, tajín, lime & Mexican crema</div>
-          <div class="card-price">$8.49</div>
-        </div>
-      </div>
-      <div class="menu-card">
-        <span class="card-emoji">🥤</span>
-        <div class="card-body">
-          <div class="card-name">Agua Fresca</div>
-          <div class="card-desc">Rotating seasonal flavors — Horchata, Jamaica, Tamarindo & Mango. Freshly made.</div>
-          <div class="card-price">$4.49</div>
-        </div>
-      </div>
+    <div class="stat-item">
+      <div class="stat-num">8<span>yr</span></div>
+      <div class="stat-label">Experience</div>
     </div>
+    <div class="stat-item">
+      <div class="stat-num">5<span>★</span></div>
+      <div class="stat-label">Average Rating</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
   </div>
 </section>
 
-<!-- SPECIALS -->
-<div class="specials-bg" id="specials">
-  <div class="section-header" style="padding-bottom: 0; margin-bottom: 48px;">
-    <span class="section-eyebrow">🎉 Weekly Events</span>
-    <h2 class="section-title">Every Day's A Fiesta</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="specials-grid">
-    <div class="special-card sc-red">
-      <div class="special-day">TUESDAY</div>
-      <div class="special-name">Taco Tuesday</div>
-      <div class="special-detail">All street tacos for less. Load up. No limits. Salsa bar included.</div>
-      <span class="special-price">$2 tacos</span>
-    </div>
-    <div class="special-card sc-yellow">
-      <div class="special-day">THURSDAY</div>
-      <div class="special-name">Burger Night</div>
-      <div class="special-detail">Any burger + elote fries combo at a special price. Our biggest deal.</div>
-      <span class="special-price">$10 combo</span>
-    </div>
-    <div class="special-card sc-green">
-      <div class="special-day">FRIDAY</div>
-      <div class="special-name">Fiesta Friday</div>
-      <div class="special-detail">Live mariachi, unlimited chips & salsa with any entrée, and happy hour drinks.</div>
-      <span class="special-price">¡Gratis chips!</span>
-    </div>
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item"><span class="marquee-dot"></span>Exterior Wash</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Paint Correction</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Ceramic Coating</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Interior Detail</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Engine Bay Clean</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Headlight Restore</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Exterior Wash</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Paint Correction</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Ceramic Coating</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Interior Detail</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Engine Bay Clean</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Headlight Restore</div>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section">
-    <div class="about-wrap">
-      <div>
-        <p class="section-eyebrow">🌵 Our Story</p>
-        <h2 class="about-big">Born From Two Loves: Mexico & The Burger</h2>
-        <p class="about-text">
-          Mex N Burger started with a simple dream — what if the bold, smoky soul of Mexican street food collided head-on with the sizzle and satisfaction of a perfect smash burger? We didn't just combine two cuisines. We created a fiesta.
-          <br><br>
-          Every recipe is hand-crafted, every ingredient locally sourced, every plate made with love and a little heat. Come hungry. Leave happy.
-        </p>
-      </div>
-      <div>
-        <div class="stats">
-          <div class="stat">
-            <span class="stat-num">12+</span>
-            <div class="stat-label">Secret Salsas</div>
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">Our<br>Services</h2>
+
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <span class="service-num">01</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="24" cy="24" r="20"/>
+        <path d="M24 4 C24 4 10 14 10 24 C10 34 24 44 24 44 C24 44 38 34 38 24 C38 14 24 4 24 4Z"/>
+        <line x1="4" y1="24" x2="44" y2="24"/>
+        <line x1="14" y1="10" x2="34" y2="38"/>
+        <line x1="34" y1="10" x2="14" y2="38"/>
+      </svg>
+      <div class="service-name">Exterior Detail</div>
+      <div class="service-desc">Hand wash, clay bar treatment, paint decontamination, and a professional wax or sealant to restore deep gloss and protect your paint.</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">02</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="6" y="16" width="36" height="24" rx="2"/>
+        <path d="M6 22 L42 22"/>
+        <path d="M16 16 L20 8 L28 8 L32 16"/>
+        <circle cx="16" cy="32" r="3"/>
+        <circle cx="32" cy="32" r="3"/>
+      </svg>
+      <div class="service-name">Interior Clean</div>
+      <div class="service-desc">Deep vacuum, steam cleaning, leather conditioning, dashboard and trim detailing, odor elimination, and window cleaning.</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">03</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="24" cy="24" r="14"/>
+        <circle cx="24" cy="24" r="6"/>
+        <path d="M24 4 L24 10"/>
+        <path d="M24 38 L24 44"/>
+        <path d="M4 24 L10 24"/>
+        <path d="M38 24 L44 24"/>
+      </svg>
+      <div class="service-name">Wheel & Tyre</div>
+      <div class="service-desc">Iron fallout removal, wheel decontamination, tyre dressing, and brake dust cleaning for a complete wheel bay transformation.</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">04</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 38 C8 38 12 28 24 28 C36 28 40 38 40 38"/>
+        <path d="M12 28 C12 28 14 14 24 14 C34 14 36 28 36 28"/>
+        <path d="M16 14 C16 14 18 6 24 6 C30 6 32 14 32 14"/>
+        <line x1="24" y1="6" x2="24" y2="4"/>
+      </svg>
+      <div class="service-name">Paint Correction</div>
+      <div class="service-desc">Multi-stage machine polishing to remove swirl marks, scratches, oxidation and water spots. Restore mirror-like clarity and depth.</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">05</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M10 36 L14 12 L24 8 L34 12 L38 36"/>
+        <path d="M10 36 L38 36"/>
+        <path d="M14 20 L34 20"/>
+        <path d="M12 28 L36 28"/>
+        <circle cx="24" cy="8" r="3"/>
+      </svg>
+      <div class="service-name">Ceramic Coating</div>
+      <div class="service-desc">Nano-ceramic protection that bonds to your paint, creating a hydrophobic, scratch-resistant shield lasting years — not weeks.</div>
+    </div>
+
+    <div class="service-card fade-up">
+      <span class="service-num">06</span>
+      <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M8 24 Q14 10 24 8 Q34 10 40 24 Q34 38 24 40 Q14 38 8 24Z"/>
+        <path d="M16 24 Q20 18 24 17 Q28 18 32 24 Q28 30 24 31 Q20 30 16 24Z"/>
+        <line x1="8" y1="24" x2="16" y2="24"/>
+        <line x1="32" y1="24" x2="40" y2="24"/>
+        <line x1="24" y1="8" x2="24" y2="17"/>
+        <line x1="24" y1="31" x2="24" y2="40"/>
+      </svg>
+      <div class="service-name">Headlight Restore</div>
+      <div class="service-desc">Sand, polish, and UV seal cloudy, yellowed headlights back to crystal clarity — dramatically improving looks and road safety.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="process-bg-text">DETAIL</div>
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Our<br>Process</h2>
+
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-dot">1</div>
+      <div class="step-connector"></div>
+      <div class="step-title">Book Online</div>
+      <div class="step-desc">Choose your package and preferred time slot. We'll confirm within 2 hours and send a reminder before your appointment.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-dot">2</div>
+      <div class="step-connector"></div>
+      <div class="step-title">Vehicle Inspection</div>
+      <div class="step-desc">We document your car's condition before we start — photos included. Full transparency, no surprises.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-dot">3</div>
+      <div class="step-connector"></div>
+      <div class="step-title">Expert Detailing</div>
+      <div class="step-desc">Our trained technicians work systematically using premium products and professional-grade equipment.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-dot">4</div>
+      <div class="step-title">Final Reveal</div>
+      <div class="step-desc">A quality inspection and walkthrough before you drive away. We're not done until you're satisfied.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why">
+  <div class="why-grid">
+    <div class="why-left">
+      <div class="section-label">Why Choose Us</div>
+      <h2 class="section-title fade-up">Beyond<br>The Wash</h2>
+      <p class="why-intro fade-up">We're not a car wash — we're craftspeople. Every vehicle gets our full attention, premium products, and techniques that actually protect and preserve your investment.</p>
+      <div class="why-features">
+        <div class="feature-row fade-up">
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 4 L24 14 L36 14 L26 22 L30 34 L20 26 L10 34 L14 22 L4 14 L16 14 Z"/>
+          </svg>
+          <div class="feature-text">
+            <h4>Premium Products Only</h4>
+            <p>We use industry-leading brands — Gtechniq, Koch-Chemie, Gyeon — nothing cheap touches your car.</p>
           </div>
-          <div class="stat">
-            <span class="stat-num">5★</span>
-            <div class="stat-label">Avg Rating</div>
+        </div>
+        <div class="feature-row fade-up">
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="20" cy="20" r="16"/>
+            <path d="M20 10 L20 20 L28 20"/>
+          </svg>
+          <div class="feature-text">
+            <h4>On-Time Guarantee</h4>
+            <p>Your time matters. We commit to deadlines and stick to them — or we discount the service.</p>
           </div>
-          <div class="stat">
-            <span class="stat-num">8</span>
-            <div class="stat-label">Years Cooking</div>
-          </div>
-          <div class="stat">
-            <span class="stat-num">∞</span>
-            <div class="stat-label">Good Vibes</div>
+        </div>
+        <div class="feature-row fade-up">
+          <svg class="feature-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 20 L14 28 L34 12"/>
+          </svg>
+          <div class="feature-text">
+            <h4>Satisfaction Guaranteed</h4>
+            <p>Not happy? We fix it free. Every time, no exceptions. That's our promise to every customer.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- REVIEWS -->
-<section style="padding: 0 0 80px;">
-  <div class="section-header" style="padding: 0 24px 48px;">
-    <span class="section-eyebrow">💬 Reviews</span>
-    <h2 class="section-title">The People Have Spoken</h2>
-    <div class="section-line"></div>
-  </div>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="review-text">"The jalapeño smash burger changed my life. I've been back four times this month and I regret nothing."</p>
-      <div class="review-author">— Carlos R.</div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="review-text">"The birria tacos with consome dipping broth are absolutely incredible. This place is the real deal."</p>
-      <div class="review-author">— Maria T.</div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">⭐⭐⭐⭐⭐</div>
-      <p class="review-text">"Elote fries + horchata on a Friday night with live mariachi playing? I'm never leaving. Take my money."</p>
-      <div class="review-author">— James K.</div>
+    <div class="why-right fade-up">
+      <div class="why-visual">
+        <div class="review-stars">★★★★★</div>
+        <div class="review-quote">"My car looks <span class="accent">better than the day</span> I bought it."</div>
+        <div class="reviewer">
+          <div class="reviewer-avatar">JR</div>
+          <div>
+            <div class="reviewer-name">James R.</div>
+            <div class="reviewer-title">BMW M4 · Verified Customer</div>
+          </div>
+        </div>
+        <div class="why-bg-number">5★</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- CTA / LOCATION -->
-<section class="cta-section" id="location">
-  <h2 class="cta-title">Ready To<br>Get Fired Up?</h2>
-  <p class="cta-sub">Come in. Dig in. Do it again. 🌮🍔🔥</p>
-  <div style="position:relative; z-index:2;">
-    <a href="#" class="btn btn-primary" style="font-size:1.4rem; padding: 18px 50px;">Order Online</a>
+<!-- PACKAGES -->
+<section class="packages" id="packages">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Choose<br>Your Package</h2>
+
+  <div class="packages-grid">
+    <div class="package-card fade-up">
+      <div class="package-tier">Entry Level</div>
+      <div class="package-name">ESSENTIAL</div>
+      <div class="package-price">
+        <span class="price-from">from</span>
+        <span class="price-num">$79</span>
+        <span class="price-unit">/service</span>
+      </div>
+      <div class="package-divider"></div>
+      <ul class="package-features">
+        <li>Exterior hand wash & dry</li>
+        <li>Wheel & tyre clean</li>
+        <li>Window clean (exterior)</li>
+        <li>Tyre dressing</li>
+        <li>Air freshener</li>
+      </ul>
+      <a href="#contact" class="pkg-btn">Book Essential</a>
+    </div>
+
+    <div class="package-card featured fade-up">
+      <div class="featured-badge">Most Popular</div>
+      <div class="package-tier">Best Value</div>
+      <div class="package-name">SIGNATURE</div>
+      <div class="package-price">
+        <span class="price-from">from</span>
+        <span class="price-num">$199</span>
+        <span class="price-unit">/service</span>
+      </div>
+      <div class="package-divider"></div>
+      <ul class="package-features">
+        <li>Everything in Essential</li>
+        <li>Full interior vacuum & wipe</li>
+        <li>Leather conditioning</li>
+        <li>Clay bar treatment</li>
+        <li>Machine polish (single stage)</li>
+        <li>Carnauba wax protection</li>
+        <li>Engine bay clean</li>
+      </ul>
+      <a href="#contact" class="pkg-btn">Book Signature</a>
+    </div>
+
+    <div class="package-card fade-up">
+      <div class="package-tier">Ultimate Care</div>
+      <div class="package-name">PRESTIGE</div>
+      <div class="package-price">
+        <span class="price-from">from</span>
+        <span class="price-num">$499</span>
+        <span class="price-unit">/service</span>
+      </div>
+      <div class="package-divider"></div>
+      <ul class="package-features">
+        <li>Everything in Signature</li>
+        <li>Multi-stage paint correction</li>
+        <li>Ceramic coating application</li>
+        <li>Headlight restoration</li>
+        <li>Full interior steam clean</li>
+        <li>Odour elimination treatment</li>
+        <li>2-year paint protection</li>
+        <li>Free follow-up wash</li>
+      </ul>
+      <a href="#contact" class="pkg-btn">Book Prestige</a>
+    </div>
   </div>
-  <div class="cta-info">
-    <div class="info-item">
-      <span class="info-icon">📍</span>
-      <div class="info-label">Location</div>
-      <div class="info-val">123 Fiesta Ave,<br>Burgertown, TX 78201</div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <h2>Ready to<br><span>Revive</span><br>Your Ride?</h2>
+  <a href="#contact" class="cta-banner-btn">Get a Free Quote</a>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Book Your<br>Detail</h2>
+
+  <div class="contact-grid">
+    <div class="contact-info fade-up">
+      <h3>Location</h3>
+      <p>123 Detail Drive, Automotive District<br>Los Angeles, CA 90210</p>
+
+      <h3>Phone</h3>
+      <p>+1 (555) 947-8321</p>
+
+      <h3>Email</h3>
+      <p>hello@reviveyryd.com</p>
+
+      <h3>Hours</h3>
+      <div class="contact-hours">
+        <span><strong>Mon – Fri</strong> 8:00am – 7:00pm</span>
+        <span><strong>Saturday</strong> 9:00am – 6:00pm</span>
+        <span><strong>Sunday</strong> 10:00am – 4:00pm</span>
+      </div>
     </div>
-    <div class="info-item">
-      <span class="info-icon">🕐</span>
-      <div class="info-label">Hours</div>
-      <div class="info-val">Mon–Thu: 11am–10pm<br>Fri–Sun: 11am–12am</div>
-    </div>
-    <div class="info-item">
-      <span class="info-icon">📞</span>
-      <div class="info-label">Phone</div>
-      <div class="info-val">(210) 555-TACO</div>
+
+    <div class="fade-up">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="John">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Smith">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="john@email.com">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" placeholder="+1 (555) 000-0000">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Vehicle Make & Model</label>
+          <input type="text" placeholder="e.g. BMW M3">
+        </div>
+        <div class="form-group">
+          <label>Package</label>
+          <select>
+            <option value="">Select Package</option>
+            <option>Essential — from $79</option>
+            <option>Signature — from $199</option>
+            <option>Prestige — from $499</option>
+            <option>Custom Quote</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Additional Notes</label>
+        <textarea placeholder="Any specific concerns or requests..."></textarea>
+      </div>
+      <button class="submit-btn">Send Booking Request →</button>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<div class="stripe"></div>
 <footer>
-  <div class="footer-logo">Mex N Burger 🌮</div>
-  <div class="footer-tagline">Where Every Bite Is A Party</div>
-  <div class="footer-links">
-    <a href="#">Menu</a>
-    <a href="#">Specials</a>
-    <a href="#">About</a>
-    <a href="#">Catering</a>
-    <a href="#">Careers</a>
-    <a href="#">Contact</a>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">REVIVE<span>.</span>RYD</a>
+      <p>Expert auto detailing services that treat your vehicle with the care and attention it deserves. Premium products. Flawless results.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <li><a href="#">Exterior Detail</a></li>
+        <li><a href="#">Interior Clean</a></li>
+        <li><a href="#">Paint Correction</a></li>
+        <li><a href="#">Ceramic Coating</a></li>
+        <li><a href="#">Headlight Restore</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Reviews</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Support</h5>
+      <ul>
+        <li><a href="#">Book Now</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Gift Cards</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
   </div>
-  <p class="footer-copy">© 2026 Mex N Burger. Made with 🌶️ and 🧡. All rights reserved.</p>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Revive.Ryd Auto Detailing. All rights reserved.</div>
+    <div class="footer-social">
+      <a href="#" class="social-link">ig</a>
+      <a href="#" class="social-link">fb</a>
+      <a href="#" class="social-link">yt</a>
+      <a href="#" class="social-link">gm</a>
+    </div>
+  </div>
 </footer>
 
 <script>
-  // Generate papel picado flags
-  const container = document.getElementById('flags');
-  const colors = ['#C0392B', '#F39C12', '#27AE60', '#fff', '#E67E22'];
-  for (let i = 0; i < 40; i++) {
-    const flag = document.createElement('div');
-    flag.className = 'flag';
-    flag.style.background = colors[i % colors.length];
-    flag.style.animationDelay = (i * 0.1) + 's';
-    container.appendChild(flag);
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let rx = 0, ry = 0, cx = 0, cy = 0;
+  document.addEventListener('mousemove', e => {
+    cx = e.clientX; cy = e.clientY;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+  });
+  function animRing() {
+    rx += (cx - rx) * 0.12;
+    ry += (cy - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+  document.querySelectorAll('a, button, .service-card, .feature-row, .package-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1.5)';
+      ring.style.borderColor = 'rgba(232,25,44,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.borderColor = 'rgba(232,25,44,0.5)';
+    });
+  });
+
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Intersection Observer for fade-up
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up, .process-step').forEach(el => observer.observe(el));
+
+  // Counter animation for hero stats
+  function animateCount(el, target, suffix) {
+    let start = 0;
+    const duration = 1800;
+    const startTime = performance.now();
+    function update(now) {
+      const progress = Math.min((now - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.querySelector('.stat-num').innerHTML = Math.floor(ease * target) + '<span>' + suffix + '</span>';
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
   }
 
-  // Smooth scroll
+  // Smooth section transitions
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const target = document.querySelector(a.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.scrollIntoView({ behavior: 'smooth' });
       }
     });
   });
 
-  // Card hover tilt effect
-  document.querySelectorAll('.menu-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
-      const y = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
-      card.style.transform = `translateY(-8px) rotateX(${y}deg) rotateY(${x}deg)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
+  // Parallax on hero car
+  window.addEventListener('scroll', () => {
+    const car = document.querySelector('.hero-car-silhouette');
+    if (car) car.style.transform = `translateY(${window.scrollY * 0.15}px)`;
   });
 
-  // Intersection observer for fade-in
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.15 });
-
-  document.querySelectorAll('.menu-card, .special-card, .review-card, .stat').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
+  // Form submit feedback
+  document.querySelector('.submit-btn').addEventListener('click', function() {
+    this.textContent = '✓ Request Sent!';
+    this.style.background = '#2a8a2a';
+    setTimeout(() => {
+      this.textContent = 'Send Booking Request →';
+      this.style.background = '';
+    }, 3000);
   });
 </script>
 </body>
